@@ -7,8 +7,9 @@ matrix = zeros(canvasSize^2, 2);
 a = 3;
 for i = 1:nrOfPts
     
-    position = canvasSize*(points(i,2))+points(i,1);
+    position = canvasSize*(points(i,2)-1)+points(i,1);
     
+    try 
     if (matrix(position,1) == 0)
         
         matrix(position,1) = i;
@@ -24,6 +25,9 @@ for i = 1:nrOfPts
             a = a+1;
         end
     end
+    catch 
+        disp(position);
+    end 
     
 end
 

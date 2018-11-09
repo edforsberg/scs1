@@ -5,37 +5,48 @@ beta = 0.6;
 gamma = 0.01;
 
 canvasSize = 100; 
-populationSize = 100; 
-nrInitiallyInfected = 2; 
+populationSize = 1000; 
+nrInfected= 2; 
 nrOfItterations = 1000; 
 
-startPositions = floor(rand(populationSize, 2)*canvasSize); 
-states = Outbrake(populationSize, nrInitiallyInfected); 
+%[startPositions, states] = InitializePopulation(populationSize, nrInfected, canvasSize);
+%startPositions = [floor(rand(populationSize, 1)*canvasSize) round(rand(populationSize, 1)*canvasSize)];
+startPositions = randi(canvasSize,populationSize,2); 
+states = Outbrake(populationSize, nrInfected); 
 
 
-plotHandle = plot(startPositions(:,1), startPositions(:,2), '.'); 
+plotHandle = scatter(startPositions(:,1), startPositions(:,2), 5, states,'filled'); 
 xlim([0 canvasSize]);
 ylim([0 canvasSize]);
 
-pts = startPositions; 
+positions = startPositions; 
 
 for i = 1:nrOfItterations
     
-    connectionMatrix = ConnectionMatrix(pts, canvasSize); 
+    connectionMatrix = ConnectionMatrix(positions, canvasSize); 
     
     for j = 1:size(connectionMatrix, 1)
         
         currPosition = connectionMatrix(j,:); 
         IndsAtRisk = connectionMatrix(j, 1:nnz(currPosition)); 
-        for k = 1:length(IndsAtRisk)
-            if (states(currPosition(k)) == 1) 
-                for l = 1:length(IndsAtRisk)
-                    if(k~=l && rand < beta)
-                        states(IndsAtRisk(l)) = 1;
-                    end
-                end
+        for k = 1:size(IndsAtRisk,2)
+            if(states(IndsAtRisk(k)) == 1 && rand < beta) 
+                for l = 1:size(IndsAtRisk,2)
+                    if(l ~= k && states(IndsAtRisk(l)) == 0) 
+                        states(IndsAtRisk(l)) = 1; 
+                    end 
+                end 
             end
         end
+                
+    end
+    
+    for j = 1:populationSize
+        
+        if(states(j) == 1 && rand < gamma) 
+            states(j) = 2; 
+        end 
+        
     end
                         
     
@@ -43,12 +54,13 @@ for i = 1:nrOfItterations
     
     for j = 1:populationSize        
         if d < rand
-            pts(j,:) = Move(pts(j,:)); 
+            positions(j,:) = Move(positions(j,:), canvasSize); 
         end
     end
     
-    set(plotHandle,'XData',pts(:,1));
-    set(plotHandle,'YData',pts(:,2));
+    set(plotHandle,'XData',positions(:,1));
+    set(plotHandle,'YData',positions(:,2));
+    set(plotHandle,'CData',states);
     drawnow
 
 end
