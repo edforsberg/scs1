@@ -1,0 +1,27 @@
+function connectionMatrix = ConnectionMatrix(points, canvasSize)
+
+nrOfPts = length(points);
+
+matrix = zeros(canvasSize^2, 2);
+
+for i = 1:nrOfPts
+    
+    position = canvasSize*(points(i,2)-1)+points(i,1);
+    
+    if (matrix(position,1) == 0) 
+        matrix(position,1) = i; 
+    else
+    
+    
+    
+end
+
+connectionMatrix = []; 
+
+for i = 1:canvasSize^2
+    if (matrix(i,2) ~= 0)
+        connectionMatrix(end+1,:) = matrix(i,:);
+    end
+end
+
+end
