@@ -5,11 +5,13 @@ beta = 0.6;
 gamma = 0.01;
 
 canvasSize = 100; 
-nrOfInds = 1000; 
+populationSize = 100; 
+nrInitiallyInfected = 2; 
 nrOfItterations = 1000; 
 
-startPositions = floor(rand(nrOfInds, 2)*canvasSize); 
-states = zeros(nrOfInds, 1); 
+startPositions = floor(rand(populationSize, 2)*canvasSize); 
+states = Outbrake(populationSize, nrInitiallyInfected); 
+
 
 plotHandle = plot(startPositions(:,1), startPositions(:,2), '.'); 
 xlim([0 canvasSize]);
@@ -21,9 +23,25 @@ for i = 1:nrOfItterations
     
     connectionMatrix = ConnectionMatrix(pts, canvasSize); 
     
+    for j = 1:size(connectionMatrix, 1)
+        
+        currPosition = connectionMatrix(j,:); 
+        IndsAtRisk = connectionMatrix(j, 1:nnz(currPosition)); 
+        for k = 1:length(IndsAtRisk)
+            if (states(currPosition(k)) == 1) 
+                for l = 1:length(IndsAtRisk)
+                    if(k~=l && rand < beta)
+                        states(IndsAtRisk(l)) = 1;
+                    end
+                end
+            end
+        end
+    end
+                        
     
     
-    for j = 1:nrOfInds        
+    
+    for j = 1:populationSize        
         if d < rand
             pts(j,:) = Move(pts(j,:)); 
         end
