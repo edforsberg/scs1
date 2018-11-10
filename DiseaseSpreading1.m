@@ -1,20 +1,20 @@
 clc
 
 %local sppreading 
-d = 0.6; 
-beta = 0.4;
-gamma = 0.03;
+d = 0.8; 
+beta = 0.45;
+gamma = 0.015;
 
 %global sppreading 
-% d = 0.7; 
-% beta = 0.5;
-% gamma = 0.02;
+% d = 0.8; 
+% beta = 0.7;
+% gamma = 0.01;
 
 ratio = sprintf('beta/gamma ratio is \n %f', beta/gamma);
 disp(ratio); 
 
 canvasSize = 100; 
-populationSize = 2000; 
+populationSize = 1000; 
 nrInfected= 1; 
 nrOfItterations = 1000; 
 
@@ -47,7 +47,7 @@ while (infection)
     
     states = Spread(connectionMatrix,states,beta);  
     states = Recover(states, gamma);                        
-    positions = Move(positions, canvasSize); 
+    positions = Move(positions, canvasSize,d); 
     
     ittVec = [ittVec; itt];
     sirVec = [sirVec; sum(states(:) == 1) sum(states(:) == 2) sum(states(:) == 3)];
