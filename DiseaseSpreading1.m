@@ -1,8 +1,17 @@
 clc
 
-d = 0.7; 
-beta = 0.7;
-gamma = 0.01;
+%local sppreading 
+d = 0.6; 
+beta = 0.4;
+gamma = 0.03;
+
+%global sppreading 
+% d = 0.7; 
+% beta = 0.5;
+% gamma = 0.02;
+
+ratio = sprintf('beta/gamma ratio is \n %f', beta/gamma);
+disp(ratio); 
 
 canvasSize = 100; 
 populationSize = 2000; 
