@@ -1,7 +1,10 @@
-function movedPoint = Move(point, canvasSize)
+function movedPoints = Move(positions, canvasSize)
 
-originalPoint = point; 
-movedPoint = point;
+movedPoints = zeros(size(positions)); 
+
+for i = 1:size(positions,1)
+     
+movedPoint = positions(i,:);
 a = rand;
 
 if a < 0.25
@@ -15,7 +18,11 @@ else
 end
 
 if(movedPoint(1) < 1 || movedPoint(2) < 1 || movedPoint(1) > canvasSize || movedPoint(2) > canvasSize) 
-    movedPoint = originalPoint;
+    movedPoints(i,:) = positions(i,:);
+else
+    movedPoints(i,:) = movedPoint; 
+end
+
 end
 
 end

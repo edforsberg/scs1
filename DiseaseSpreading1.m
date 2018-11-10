@@ -26,44 +26,19 @@ xlim([0 canvasSize]);
 ylim([0 canvasSize]);
 colormap([0 0 1; 1 0 0; 0 1 0]); 
 
-positions = startPositions; 
-
+positions = startPositions;
 infection = true; 
 itt = 1; 
+
 while (infection) 
     
     itt = itt+1; 
     
     connectionMatrix = ConnectionMatrix(positions, canvasSize); 
     
-    for j = 1:size(connectionMatrix, 1)        
-        currPosition = connectionMatrix(j,:); 
-        IndsAtRisk = connectionMatrix(j, 1:nnz(currPosition)); 
-        for k = 1:size(IndsAtRisk,2)
-            if(states(IndsAtRisk(k)) == 2 && rand < beta) 
-                for l = 1:size(IndsAtRisk,2)
-                    if(l ~= k && states(IndsAtRisk(l)) == 1) 
-                        states(IndsAtRisk(l)) = 2; 
-                    end 
-                end 
-            end
-        end
-                
-    end
-    
-    for j = 1:populationSize
-        
-        if(states(j) == 2 && rand < gamma) 
-            states(j) = 3; 
-        end 
-        
-    end                         
-    
-    for j = 1:populationSize        
-        if d < rand
-            positions(j,:) = Move(positions(j,:), canvasSize); 
-        end
-    end
+    states = Spread(connectionMatrix,states,beta);  
+    states = Recover(states, gamma);                        
+    positions = Move(positions, canvasSize); 
     
     ittVec = [ittVec; itt];
     sirVec = [sirVec; sum(states(:) == 1) sum(states(:) == 2) sum(states(:) == 3)];
@@ -75,8 +50,7 @@ while (infection)
     set(plotHandle2,'XData',positions(:,1));
     set(plotHandle2,'YData',positions(:,2));
     set(plotHandle2,'CData',states);
-    drawnow
-    
+    drawnow    
     
     if(sum(states(:) == 2) == 0) 
         infection = false; 

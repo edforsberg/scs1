@@ -1,5 +1,8 @@
-function movedPoint = Move(point, canve)
+function movedPoint = Move(positions, canvasSize)
 
+for i = 1:size(positions,1)
+    
+originalPoint = positions(i); 
 movedPoint = point;
 a = rand;
 
@@ -10,7 +13,11 @@ elseif a < 0.5
 elseif a < 0.75
     movedPoint(2) = movedPoint(2) -1;
 else
-    movedPoint(2) = movedPoint(2) +1;
-    
+    movedPoint(2) = movedPoint(2) +1;    
 end
 
+if(movedPoint(1) < 1 || movedPoint(2) < 1 || movedPoint(1) > canvasSize || movedPoint(2) > canvasSize) 
+    movedPoint = originalPoint;
+end
+
+end
