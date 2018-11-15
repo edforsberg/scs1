@@ -1,41 +1,46 @@
 clc
 
+beta = 0.6;
 d = 0.8;
 proportionAffected = 0.01;
-nrAverage = 1;
+nrAverage = 20; 
 
-tresholdVec = [];
-betaVec = [];
+beta0 = 0.5; 
+betaMax = 0.8;
 
+gamma0 = 0.01;
+gammaMax = 0.06;
 
-plotHandle1 = plot(0, 0);
-pbaspect([1 1 1]);
+betaRatioMat = []; 
+recoverRatioMat = []; 
+betaVec = []; 
 
-for beta = 0.4:0.05:0.7  
+beta = beta0; 
+while(beta<betaMax) 
     
-    betaRatioVec = [];
-    recoverRatioVec = [];
+i= i+1; 
+beta = beta +0.05*i; 
     
-    gamma0 = 0.01;
-    for i = 0.1:0.1:6
-        gamma = gamma0*i;
-        averageI = 0;
-        
-        for j = 1:nrAverage
-            averageI = averageI + Epedemic(beta, gamma, d, proportionAffected);
-        end
-        averageI = averageI/nrAverage;
-        
-        recoverRatioVec = [recoverRatioVec; averageI];
-        betaRatioVec = [betaRatioVec;beta/gamma];
-        
+betaRatioVec = [];
+recoverRatioVec = [];
+gamma = gamma0; 
+j = 0; 
+while(gamma< gammaMax)     
+    j = j+1; 
+    gamma = gamma0 + 0.005*j; 
+    averageI = 0; 
+    
+    for h = 1:nrAverage
+        averageI = averageI + Epedemic(beta, gamma, d, proportionAffected); 
     end
+    averageI = averageI/nrAverage; 
     
-    treshold = FindTreshold(recoverRatioVec, betaRatioVec);
-    betaVec = [betaVec; beta]; 
-    tresholdVec = [tresholdVec;treshold]; 
-    
-    set(plotHandle1, 'XData', betaVec, 'YData', tresholdVec);
-    drawnow
-    
+    recoverRatioVec = [recoverRatioVec; averageI];
+    betaRatioVec = [betaRatioVec;beta/gamma];   
+end
+
+recoverRatioMat(:,j) = recoverRatioVec; 
+betaRatioMat(:,j) = betaRatioVec; 
+betaVec = [betaVec beta]; 
+
 end

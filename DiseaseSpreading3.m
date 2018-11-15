@@ -11,8 +11,11 @@ plotHandle1 = semilogx(0, 0);
 pbaspect([1 1 1]);
 
 gamma0 = 0.01;
-for i = 0.1:0.1:6
-    gamma = gamma0*i;
+gammaMax = 0.06;
+gamma = gamma0; 
+
+while(gamma< gammaMax) 
+    gamma = gamma + 0.005; 
     averageI = 0; 
     
     for j = 1:nrAverage

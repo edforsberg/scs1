@@ -1,6 +1,6 @@
 function connectionMatrix = ConnectionMatrix(points, canvasSize)
 
-nrOfPts = length(points);
+nrOfPts = size(points,1);
 
 matrix = zeros(canvasSize^2, 2);
 
