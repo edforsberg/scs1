@@ -1,46 +1,36 @@
 clc
 
-beta = 0.6;
+betaVec = linspace(0.2, 0.95, 20);
+ratioVec = logspace(-0.3, 2.3, 20);
+
 d = 0.8;
 proportionAffected = 0.01;
 nrAverage = 20; 
 
-beta0 = 0.5; 
-betaMax = 0.8;
+recoverRatioMat = zeros(size(betaVec,2), size(ratioVec,2));
 
-gamma0 = 0.01;
-gammaMax = 0.06;
-
-betaRatioMat = []; 
-recoverRatioMat = []; 
-betaVec = []; 
-
-beta = beta0; 
-while(beta<betaMax) 
+for i = 1:size(betaVec,2) 
     
-i= i+1; 
-beta = beta +0.05*i; 
+    beta = betaVec(i); 
+
+for j = 1:size(ratioVec,2) 
     
-betaRatioVec = [];
-recoverRatioVec = [];
-gamma = gamma0; 
-j = 0; 
-while(gamma< gammaMax)     
-    j = j+1; 
-    gamma = gamma0 + 0.005*j; 
+    gamma = 1/(ratioVec(j)/beta); 
+    
     averageI = 0; 
     
-    for h = 1:nrAverage
+    for k = 1:nrAverage
         averageI = averageI + Epedemic(beta, gamma, d, proportionAffected); 
     end
     averageI = averageI/nrAverage; 
     
-    recoverRatioVec = [recoverRatioVec; averageI];
-    betaRatioVec = [betaRatioVec;beta/gamma];   
+    recoverRatioMat(i,j) = averageI;
+      
 end
 
-recoverRatioMat(:,j) = recoverRatioVec; 
-betaRatioMat(:,j) = betaRatioVec; 
-betaVec = [betaVec beta]; 
-
 end
+
+csvwrite('recoverRatioMat4', recoverRatioMat);
+csvwrite('betaVec4', betaVec);
+csvwrite('ratioVec4', ratioVec);
+
