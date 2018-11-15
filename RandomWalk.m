@@ -1,16 +1,6 @@
 clc
 
-%local spreading 
-% d = 0.8; 
-% beta = 0.45;
-% gamma = 0.01;
-
-%global spreading 
-% d = 0.8; 
-% beta = 0.7;
-% gamma = 0.01;
-
-d = 0.4; 
+d = 1; 
 beta = 0.7;
 gamma = 0.01;
 
@@ -18,8 +8,8 @@ ratio = sprintf('beta/gamma ratio is \n %f', beta/gamma);
 disp(ratio); 
 
 canvasSize = 100; 
-populationSize = 1000; 
-nrInfected= 1; 
+populationSize = 1; 
+nrInfected = 0; 
 nrOfItterations = 1000; 
 
 startPositions = randi(canvasSize,populationSize,2); 
@@ -43,7 +33,11 @@ positions = startPositions;
 infection = true; 
 itt = 1; 
 
-while (infection) 
+xData = []; 
+yData = [];
+cData = []; 
+
+while (true) 
     
     itt = itt+1; 
     
@@ -53,6 +47,10 @@ while (infection)
     states = Recover(states, gamma);                        
     positions = Move(positions, canvasSize,d); 
     
+    xData = [xData; positions(:,1)]; 
+    yData = [yData; positions(:,2)]; 
+    cData = [cData; states]; 
+    
     ittVec = [ittVec; itt];
     sirVec = [sirVec; sum(states(:) == 1) sum(states(:) == 2) sum(states(:) == 3)];
     
@@ -60,9 +58,9 @@ while (infection)
     set(plotHandle1(i), 'XData', ittVec, 'YData', sirVec(:,i)); 
     end 
     
-    set(plotHandle2,'XData',positions(:,1));
-    set(plotHandle2,'YData',positions(:,2));
-    set(plotHandle2,'CData',states);
+    set(plotHandle2,'XData',xData,'YData',yData,'CData',cData);
+    %set(plotHandle2,'YData',yData);
+    %set(plotHandle2,'CData',states);
     drawnow    
     
     if(sum(states(:) == 2) == 0) 

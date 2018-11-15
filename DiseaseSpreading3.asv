@@ -14,10 +14,8 @@ gamma0 = 0.005;
 gammaMax = 0.06;
 gamma = gamma0; 
 
-
-
 while(gamma< gammaMax) 
-     
+    gamma = gamma0*; 
     averageI = 0; 
     
     for j = 1:nrAverage
@@ -29,6 +27,4 @@ while(gamma< gammaMax)
     betaRatioVec = [betaRatioVec;beta/gamma];
     set(plotHandle1, 'XData', betaRatioVec, 'YData', recoverRatioVec);
     drawnow
-    
-    gamma = gamma+0.003;
 end
